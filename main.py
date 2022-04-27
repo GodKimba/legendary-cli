@@ -3,9 +3,20 @@ import imaplib
 import email
 from email.header import decode_header
 from decouple import config
+from enum import Enum
+import os
 
 
-def main(user: str = typer.Argument(..., prompt="Please, insert your mail account"), password: str = typer.Option(..., prompt="Please insert your mail password")):
+os.environ["USERNAME"] = config("USERNAME")
+os.environ["PASSWORD"] = config("PASSWORD")
+
+
+
+
+
+
+
+def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, prompt="Please, insert your mail account"), password: str = typer.Option(None, envvar=["PASSWORD"], prompt="Please insert your mail password", hide_input=True, show_envvar=False)):
     
     mail_server = "imap.gmail.com"
     imap = imaplib.IMAP4_SSL(mail_server)
@@ -53,7 +64,7 @@ def main(user: str = typer.Argument(..., prompt="Please, insert your mail accoun
             imap.store(mail, "+FLAGS", "\\Deleted")
 
 
-    user_response = typer.prompt("Do you wish to search by subject or by sender? (type: subject, sender or quit:\n").lower().strip()
+    user_response = typer.prompt("Do you wish to search by subject or by sender? (type: subject, sender or quit)").lower().strip()
 
     if user_response == "sender":
         try:
@@ -78,4 +89,5 @@ def main(user: str = typer.Argument(..., prompt="Please, insert your mail accoun
     imap.logout()
 
 if __name__ == "__main__":
+    cli()
     typer.run(main)

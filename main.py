@@ -127,9 +127,4 @@ if __name__ == "__main__":
 
 
 # Still need to change the way that the default user is set
-
-
-
-
-
 # First ask 

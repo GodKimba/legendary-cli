@@ -1,4 +1,6 @@
-click==8.1.2
+click==7.1.2
 colorama==0.4.4
+python-decouple==3.6
 shellingham==1.4.0
-typer==0.4.1
+typer==0.3.2
+typer-cli==0.0.12

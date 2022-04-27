@@ -6,16 +6,11 @@ from decouple import config
 from enum import Enum
 import os
 
-
+# Environment variables to hide the default value from cli 
 os.environ["USERNAME"] = config("USERNAME")
 os.environ["PASSWORD"] = config("PASSWORD")
 
-
-
-
-
-
-
+# Using envvar for lack of better tool
 def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, prompt="Please, insert your mail account"), password: str = typer.Option(None, envvar=["PASSWORD"], prompt="Please insert your mail password", hide_input=True, show_envvar=False)):
     
     mail_server = "imap.gmail.com"
@@ -63,7 +58,7 @@ def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, 
             # Marking the mail as deleted
             imap.store(mail, "+FLAGS", "\\Deleted")
 
-
+    # Need to put all of this inside a function
     user_response = typer.prompt("Do you wish to search by subject or by sender? (type: subject, sender or quit)").lower().strip()
 
     if user_response == "sender":
@@ -89,5 +84,7 @@ def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, 
     imap.logout()
 
 if __name__ == "__main__":
-    cli()
     typer.run(main)
+
+
+# Still need to change the way that the default user is set

@@ -23,10 +23,6 @@ class User:
         self.username = username
         self.password = password
         self.mail_server = mail_server
-
-        imap = imaplib.IMAP4_SSL(self.mail_server)
-        imap.login(self.username, self.password)
-        imap.select("inbox")
     
 
     def initialize_user(self):
@@ -137,8 +133,9 @@ def main(
         hide_input=True,
         show_envvar=False,
     ),
-)
-)
+
+    
+))
 
 
 

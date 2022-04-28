@@ -138,28 +138,24 @@ def main(
 ))
 
 
+def create_user_file():
+    username = input("Enter your mail address: ").lower().strip()
+    password = input("Enter your password: ")
 
+    with open(".env", "w") as file:
+        file.write(f"USERNAME={username}\n")
+        file.write(f"PASSWORD={password}")
 
-def set_user_credentials():
+def main():
+    if not os.path.exists(".env"):
+        create_user_file()
+    
     primary_user = User(username = config("USERNAME"), password=config("PASSWORD"), mail_server="imap.gmail.com")
 
+    primary_user.initialize_user()
+    primary_user.deletion_parent()
+    primary_user.reload_deletion()
 
-
-def create_user_file():
-    if os.path.exists(".env"):
-        print("You already have a username and a password saved.")
-        set_user_credentials()
-    else:
-        username = input("Enter your username: ").lower().strip()
-        password = input("Enter your password: ")
-
-        with open(".env", "w") as file:
-            file.write(f"USERNAME={username}\n")
-            file.write(f"PASSWORD={password}")
-
-            
-        set_user_credentials()
-        
 
 
 

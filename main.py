@@ -15,6 +15,7 @@ app = typer.Typer()
 # Still need to change the way that the default user is set
 # Fix the error from searching non existing keys words
 # I think is better to use @app.command() to have a cleaner and more efficient code
+# Need to create another file to store the classes
 
 
 class User:
@@ -121,10 +122,6 @@ class User:
             imap.store(mail, "+FLAGS", "\\Deleted")
         print("Deletion successeful!")
         self.reload_deletion() 
-
-
-
-
 
 def main(
     user: str = typer.Option(

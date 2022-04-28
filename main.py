@@ -141,8 +141,7 @@ class User:
         imap.login(self.username, self.password)
         imap.select("inbox")
     
-    def register_user(self):
-        pass
+
 
     def initialize_user(self):
         imap = imaplib.IMAP4_SSL(self.mail_server)
@@ -259,11 +258,38 @@ def main(
         show_envvar=False,
     ),
 )
+)
 
-primary_user = User(username = config("USERNAME"), password=config("PASSWORD"), mail_server="imap.gmail.com")
 
-primary_user.initialize_user()
-primary_user.delete_by_sender()
+
+
+def set_user_credentials():
+        primary_user = User(username = config("USERNAME"), password=config("PASSWORD"), mail_server="imap.gmail.com")
+
+
+
+def create_user_file():
+        username = input("Enter your username: ").lower().strip()
+        password = input("Enter your password: ")
+
+        with open(".env", "w") as file:
+            file.write(f"USERNAME={username}\n")
+            file.write(f"PASSWORD={password}")
+
+            
+        set_user_credentials()
+        
+
+
+
+
+
+
+if os.path.exists(".env"):
+    pass
+
+
+
 
 
 

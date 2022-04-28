@@ -6,13 +6,27 @@ from decouple import config
 from enum import Enum
 import os
 
-# Environment variables to hide the default value from cli 
+# Environment variables to hide the default value from cli
 os.environ["USERNAME"] = config("USERNAME")
 os.environ["PASSWORD"] = config("PASSWORD")
 
 # Using envvar for lack of better tool
-def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, prompt="Please, insert your mail account"), password: str = typer.Option(None, envvar=["PASSWORD"], prompt="Please insert your mail password", hide_input=True, show_envvar=False)):
-    
+def main(
+    user: str = typer.Option(
+        None,
+        envvar=["USERNAME"],
+        show_envvar=False,
+        prompt="Please, insert your mail account",
+    ),
+    password: str = typer.Option(
+        None,
+        envvar=["PASSWORD"],
+        prompt="Please insert your mail password",
+        hide_input=True,
+        show_envvar=False,
+    ),
+):
+
     mail_server = "imap.gmail.com"
     imap = imaplib.IMAP4_SSL(mail_server)
     imap.login(user, password)
@@ -59,7 +73,13 @@ def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, 
             imap.store(mail, "+FLAGS", "\\Deleted")
 
     # Need to put all of this inside a function
-    user_response = typer.prompt("Do you wish to search by subject or by sender? (type: subject, sender or quit)").lower().strip()
+    user_response = (
+        typer.prompt(
+            "Do you wish to search by subject or by sender? (type: subject, sender or quit)"
+        )
+        .lower()
+        .strip()
+    )
 
     if user_response == "sender":
         try:
@@ -67,7 +87,6 @@ def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, 
 
         except TypeError:
             print("Try again, be sure that the sender email exists.")
-
 
     elif user_response == "subject":
         try:
@@ -78,10 +97,10 @@ def main(user: str = typer.Option(None, envvar=["USERNAME"], show_envvar=False, 
         print("Be sure to type a valid answer")
         main()
 
-
     imap.expunge()
     imap.close()
     imap.logout()
+
 
 if __name__ == "__main__":
     typer.run(main)

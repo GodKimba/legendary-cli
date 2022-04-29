@@ -32,6 +32,12 @@ def main(
     imap.login(user, password)
     imap.select("inbox")
 
+    
+    def delete_and_expunge():
+        imap.expunge()
+        imap.close()
+        imap.logout()
+
     def delete_by_sender():
         sender = input("Enter the sender mail address: ").lower().strip()
         status, messages = imap.search(None, f"FROM {sender}")
@@ -51,6 +57,9 @@ def main(
                     print("Deleting", subject)
             # Marking the mail as deleted
             imap.store(mail, "+FLAGS", "\\Deleted")
+        print("Deletion successeful!")
+        reload_deletion()
+
 
     def delete_by_subject():
         subject = input("Enter the subject key-words: ").lower().strip()
@@ -71,35 +80,46 @@ def main(
                     print("Deleting", subject)
             # Marking the mail as deleted
             imap.store(mail, "+FLAGS", "\\Deleted")
+        print("Deletion successeful!")
+        reload_deletion()
 
     # Need to put all of this inside a function
-    user_response = (
-        typer.prompt(
-            "Do you wish to search by subject or by sender? (type: subject, sender or quit)"
+    def deletion_parent():
+        user_response = (
+            typer.prompt(
+                "Do you wish to search by subject or by sender? (type: subject, sender or quit)"
+            )
+            .lower()
+            .strip()
         )
-        .lower()
-        .strip()
-    )
 
-    if user_response == "sender":
-        try:
-            delete_by_sender()
+        if user_response == "sender":
+            try:
+                delete_by_sender()
 
-        except TypeError:
-            print("Try again, be sure that the sender email exists.")
+            except TypeError:
+                print("Try again, be sure that the sender email exists.")
 
-    elif user_response == "subject":
-        try:
-            delete_by_subject()
-        except TypeError:
-            print("Try again, be sure that the subject key words exists.")
-    else:
-        print("Be sure to type a valid answer")
-        main()
+        elif user_response == "subject":
+            try:
+                delete_by_subject()
+            except TypeError:
+                print("Try again, be sure that the subject key words exists.")
+        else:
+            print("Be sure to type a valid answer")
+            main()
 
-    imap.expunge()
-    imap.close()
-    imap.logout()
+    
+    def reload_deletion():
+        user_response = input("Do you wan't to delete more items?(y/n)").lower().strip()
+        if user_response == "n":
+            delete_and_expunge()
+
+        if user_response == "y":
+            deletion_parent()
+    
+    deletion_parent()    
+    delete_and_expunge()
 
 
 if __name__ == "__main__":
@@ -107,3 +127,9 @@ if __name__ == "__main__":
 
 
 # Still need to change the way that the default user is set
+
+
+
+
+
+# First ask 

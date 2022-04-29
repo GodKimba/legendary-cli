@@ -34,7 +34,6 @@ def main():
 
     primary_user.initialize_user()
     primary_user.deletion_parent()
-    primary_user.reload_deletion()
 
         
 

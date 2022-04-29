@@ -10,12 +10,9 @@ class User:
         self.password = password
         self.mail_server = mail_server
 
-        imap = imaplib.IMAP4_SSL(self.mail_server)
-        imap.login(self.username, self.password)
-        imap.select("inbox")
-
 
     def initialize_user(self):
+        global imap
         imap = imaplib.IMAP4_SSL(self.mail_server)
         imap.login(self.username, self.password)
         imap.select("inbox")
@@ -25,11 +22,13 @@ class User:
         imap.expunge()
         imap.close()
         imap.logout()
+        typer.echo("Thanks, until the next time!")
+        typer.Exit(code=0)
 
 
 
     def reload_deletion(self):
-        user_response = input("Do you wan't to delete more items?(y/n)").lower().strip()
+        user_response = input("Do you wan't to delete more items?(y/n)\n").lower().strip()
         if user_response == "n":
             self.delete_and_expunge()
 
@@ -58,6 +57,10 @@ class User:
                 self.delete_by_subject()
             except TypeError:
                 print("Try again, be sure that the subject key words exists.")
+        
+        elif user_response == "quit":
+            raise typer.Abort()
+
         else:
             print("Be sure to type a valid answer")
             self.deletion_parent()

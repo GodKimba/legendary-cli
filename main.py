@@ -1,9 +1,5 @@
 import typer
-import imaplib
-import email
-from email.header import decode_header
 from decouple import config
-from enum import Enum
 from classes import User
 import os
 
@@ -18,9 +14,15 @@ app = typer.Typer()
 # I think is better to use @app.command() to have a cleaner and more efficient code
 # Need to create another file to store the classes
 
+
+def check_if_empty(item_to_check):
+    pass
+
+
 def create_user_file():
-    username = input("Enter your mail address: ").lower().strip()
-    password = input("Enter your password: ")
+    username = input("Enter your gmail address: ").lower().strip()
+    typer.secho("If you don't have a application passowrd yet, follow these instructions: https://support.google.com/accounts/answer/185833?hl=en", fg=typer.colors.GREEN)
+    password = input("Enter your application password: ")
 
     with open(".env", "w") as file:
         file.write(f"USERNAME={username}\n")

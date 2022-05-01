@@ -13,6 +13,7 @@ app = typer.Typer()
 # Fix the error from searching non existing keys words
 # I think is better to use @app.command() to have a cleaner and more efficient code
 # Need to create another file to store the classes
+# Set to hide password input
 
 
 def check_if_empty(item_to_check):

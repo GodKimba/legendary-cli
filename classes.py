@@ -24,7 +24,7 @@ class User:
         imap.expunge()
         imap.close()
         imap.logout()
-        typer.echo("Thanks, until the next time!")
+        typer.secho("Thanks, until the next time!", color="GREEN")
         typer.Exit(code=0)
 
 
@@ -61,7 +61,8 @@ class User:
                 print("Try again, be sure that the subject key words exists.")
         
         elif user_response == "quit":
-            raise typer.Abort()
+            typer.secho("Until the next time!", fg=typer.colors.GREEN)
+            raise typer.Exit(0)
 
         else:
             print("Be sure to type a valid answer")
@@ -91,7 +92,8 @@ class User:
                 imap.store(mail, "+FLAGS", "\\Deleted")
             print("Deletion successeful!")
         except:
-            typer.echo(f"Error, try again.", err=True)
+            typer.secho(f"Error, try again.", err=True, fg=typer.colors.GREEN)
+            raise typer.Exit(0)
             self.delete_by_sender()
         self.reload_deletion()
 
@@ -118,7 +120,7 @@ class User:
                 imap.store(mail, "+FLAGS", "\\Deleted")
             print("Deletion successeful!")
         except:
-            typer.echo(f"Error, try again.", err=True)
+            typer.secho(f"Error, try again.", err=True, fg=typer.colors.GREEN)
             self.delete_by_subject()
         self.reload_deletion() 
 

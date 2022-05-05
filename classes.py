@@ -4,6 +4,8 @@ import email
 from email.header import decode_header
 
 
+try_again_message = "Try again, be sure that the sender email exists."
+
 class User:
     def __init__(self, username, password, mail_server):
         self.username = username
@@ -15,7 +17,7 @@ class User:
         imap = imaplib.IMAP4_SSL(self.mail_server)
         imap.login(self.username, self.password)
         imap.select('"[Gmail]/All Mail"')
-
+        
     def delete_and_expunge(self):
         imap.expunge()
         imap.close()
@@ -47,14 +49,13 @@ class User:
                 self.delete_by_sender()
 
             except TypeError:
-                print("Try again, be sure that the sender email exists.")
+                print(try_again_message)
 
         elif user_response == "subject":
             try:
                 self.delete_by_subject()
             except TypeError:
-                print("Try again, be sure that the subject key words exists.")
-
+                print(try_again_message)
         elif user_response == "quit":
             typer.secho("Until the next time!", fg=typer.colors.GREEN)
             raise typer.Exit(0)

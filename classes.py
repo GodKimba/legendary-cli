@@ -1,10 +1,8 @@
-from os import wait
 import typer
 import imaplib
 import email
 from email.header import decode_header
-from decouple import config
-import sys
+
 
 class User:
     def __init__(self, username, password, mail_server):
@@ -12,13 +10,11 @@ class User:
         self.password = password
         self.mail_server = mail_server
 
-
     def initialize_user(self):
         global imap
         imap = imaplib.IMAP4_SSL(self.mail_server)
         imap.login(self.username, self.password)
         imap.select('"[Gmail]/All Mail"')
-
 
     def delete_and_expunge(self):
         imap.expunge()
@@ -27,16 +23,15 @@ class User:
         typer.secho("Thanks, until the next time!", color="GREEN")
         typer.Exit(code=0)
 
-
-
     def reload_deletion(self):
-        user_response = input("Do you wan't to delete more items?(y/n)\n").lower().strip()
+        user_response = (
+            input("Do you wan't to delete more items?(y/n)\n").lower().strip()
+        )
         if user_response == "n":
             self.delete_and_expunge()
 
         if user_response == "y":
             self.deletion_parent()
-    
 
     def deletion_parent(self):
         user_response = (
@@ -59,7 +54,7 @@ class User:
                 self.delete_by_subject()
             except TypeError:
                 print("Try again, be sure that the subject key words exists.")
-        
+
         elif user_response == "quit":
             typer.secho("Until the next time!", fg=typer.colors.GREEN)
             raise typer.Exit(0)
@@ -67,8 +62,6 @@ class User:
         else:
             print("Be sure to type a valid answer")
             self.deletion_parent()
-
-
 
     def delete_by_sender(self):
         sender = input("Enter the sender mail address: ").lower().strip()
@@ -97,7 +90,6 @@ class User:
             self.delete_by_sender()
         self.reload_deletion()
 
-
     def delete_by_subject(self):
         subject = input("Enter the subject key-words: ")
         status, messages = imap.search(None, f"SUBJECT {subject}")
@@ -122,6 +114,4 @@ class User:
         except:
             typer.secho(f"Error, try again.", err=True, fg=typer.colors.GREEN)
             self.delete_by_subject()
-        self.reload_deletion() 
-
-
+        self.reload_deletion()

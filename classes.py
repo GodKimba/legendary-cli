@@ -45,6 +45,7 @@ class User:
             .strip()
         )
 
+        # Transform this in a function
         if user_response == "sender":
             try:
                 self.delete_by_sender()
@@ -73,22 +74,13 @@ class User:
             # Loop to iterate over targeted mails and mark them as deleted
             for mail in messages:
                 _, msg = imap.fetch(mail, "(RFC822)")
-                # This second loop is only for printing the SUBJECT of targeted mails
-                for response in msg:
-                    if isinstance(response, tuple):
-                        msg = email.message_from_bytes(response[1])
-                        # Decoding the mail subject
-                        subject = decode_header(msg["Subject"])[0][0]
-                        if isinstance(subject, bytes):
-                            # If it is a bytes type, decode to str
-                            subject = subject.decode()
-                        print("Deleting", subject)
+                self.show_messages_topics(msg)
+
                 # Marking the mail as deleted
                 imap.store(mail, "+FLAGS", "\\Deleted")
             print("Deletion successeful!")
         except:
             typer.secho(f"Error, try again.", err=True, fg=typer.colors.GREEN)
-            raise typer.Exit(0)
             self.delete_by_sender()
         self.reload_deletion()
 
@@ -101,15 +93,8 @@ class User:
             for mail in messages:
                 _, msg = imap.fetch(mail, "(RFC822)")
                 # This second loop is only for printing the SUBJECT of targeted mails
-                for response in msg:
-                    if isinstance(response, tuple):
-                        msg = email.message_from_bytes(response[1])
-                        # Decoding the mail subject
-                        subject = decode_header(msg["Subject"])[0][0]
-                        if isinstance(subject, bytes):
-                            # If it is a bytes type, decode to str
-                            subject = subject.decode()
-                        print("Deleting", subject)
+                self.show_messages_topics(msg)
+
                 # Marking the mail as deleted
                 imap.store(mail, "+FLAGS", "\\Deleted")
             print("Deletion successeful!")
@@ -119,7 +104,6 @@ class User:
         self.reload_deletion()
 
     def delete_by_date(self):
-
         status, messages = imap.search(None, 'SINCE "01-JAN-2020"')
         try:
             messages = messages[0].split(b" ")
@@ -127,19 +111,22 @@ class User:
             for mail in messages:
                 _, msg = imap.fetch(mail, "(RFC822)")
                 # This second loop is only for printing the SUBJECT of targeted mails
-                for response in msg:
-                    if isinstance(response, tuple):
-                        msg = email.message_from_bytes(response[1])
-                        # Decoding the mail subject
-                        subject = decode_header(msg["Subject"])[0][0]
-                        if isinstance(subject, bytes):
-                            # If it is a bytes type, decode to str
-                            subject = subject.decode()
-                        print("Deleting", subject)
-                # Marking the mail as deleted
+                self.show_messages_topics(msg)
+
                 imap.store(mail, "+FLAGS", "\\Deleted")
             print("Deletion successeful!")
         except:
             typer.secho(f"Error, try again.", err=True, fg=typer.colors.GREEN)
             self.delete_by_subject()
         self.reload_deletion()
+
+    def show_messages_topics(self, messages):
+        for response in messages:
+            if isinstance(response, tuple):
+                msg = email.message_from_bytes(response[1])
+                # Decoding the mail subject
+                subject = decode_header(msg["Subject"])[0][0]
+                if isinstance(subject, bytes):
+                    # If it is a bytes type, decode to str
+                    subject = subject.decode()
+                print("Deleting", subject)

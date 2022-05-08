@@ -6,7 +6,7 @@ from email.header import decode_header
 
 try_again_message = "Try again, be sure that the sender email exists."
 
-
+# Unicode error when trying to insert a subject with accent letters
 class User:
     def __init__(self, username, password, mail_server):
         self.username = username
@@ -39,26 +39,26 @@ class User:
     def deletion_parent(self):
         user_response = (
             typer.prompt(
-                "Do you wish to search by subject or by sender? (type: subject, sender or quit)"
+                "Do you wish to search by subject or by sender? (type: subject(s), sender(sd) or quit(q))"
             )
             .lower()
             .strip()
         )
 
         # Transform this in a function
-        if user_response == "sender":
+        if user_response == "sd":
             try:
                 self.delete_by_sender()
 
             except TypeError:
                 print(try_again_message)
 
-        elif user_response == "subject":
+        elif user_response == "s":
             try:
                 self.delete_by_subject()
             except TypeError:
                 print(try_again_message)
-        elif user_response == "quit":
+        elif user_response == "q":
             typer.secho("Until the next time!", fg=typer.colors.GREEN)
             raise typer.Exit(0)
 

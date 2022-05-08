@@ -25,7 +25,7 @@ def create_user_file():
         "If you don't have a application passowrd yet, follow these instructions: https://support.google.com/accounts/answer/185833?hl=en",
         fg=typer.colors.GREEN,
     )
-    password = typer.prompt("Enter your application password: ", hide_input: True)
+    password = typer.prompt("Enter your application password: ")
 
     with open(".env", "w") as file:
         file.write(f"USERNAME={username}\n")

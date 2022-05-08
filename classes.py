@@ -6,6 +6,7 @@ from email.header import decode_header
 
 try_again_message = "Try again, be sure that the sender email exists."
 
+
 class User:
     def __init__(self, username, password, mail_server):
         self.username = username
@@ -16,8 +17,8 @@ class User:
         global imap
         imap = imaplib.IMAP4_SSL(self.mail_server)
         imap.login(self.username, self.password)
-        imap.select('"[Gmail]/All Mail"')
-        
+        imap.select("INBOX")
+
     def delete_and_expunge(self):
         imap.expunge()
         imap.close()

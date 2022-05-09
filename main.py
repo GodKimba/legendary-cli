@@ -12,14 +12,14 @@ app = typer.Typer()
 # Still need to change the way that the default user is set
 # Fix the error from searching non existing keys words
 # I think is better to use @app.command() to have a cleaner and more efficient code
-# Need to create another file to store the classes
 
 
 def check_if_empty(item_to_check):
     pass
 
-
-def create_user_file():
+# Better utilize the typer library to make clear to the user to type the password
+# Or just throw out the hole cli concept and make a ui...
+def create_user_file(password: str =typer.Option(prompt: True, hide_input: True)):
     username = input("Enter your gmail address: ").lower().strip()
     typer.secho(
         "If you don't have a application passowrd yet, follow these instructions: https://support.google.com/accounts/answer/185833?hl=en",

@@ -6,19 +6,23 @@ import unidecode
 
 try_again_message = "Try again, be sure that the sender email exists."
 
-# Unicode error when trying to insert a subject with accent letters
+
 class User:
+    # Initializing the User class
     def __init__(self, username, password, mail_server):
         self.username = username
         self.password = password
         self.mail_server = mail_server
 
+    # Connecting the user to the imapserver
     def initialize_user(self):
+        # Making the imap var global, so the other functions use the same var
         global imap
         imap = imaplib.IMAP4_SSL(self.mail_server)
         imap.login(self.username, self.password)
         imap.select("INBOX")
 
+    # The expunge function delete all mails flagged as DELETED by the delete_by_sender/subject functions.
     def delete_and_expunge(self):
         imap.expunge()
         imap.close()
@@ -26,6 +30,7 @@ class User:
         typer.secho("Thanks, until the next time!", color="GREEN")
         typer.Exit(code=0)
 
+    # Returning the option to delete new mails
     def reload_deletion(self):
         user_response = (
             input("Do you wan't to delete more items?(y/n)\n").lower().strip()
@@ -37,6 +42,7 @@ class User:
         if user_response == "y":
             self.deletion_parent()
 
+    # The main deletion function, utilizes the other ones to work
     def deletion_parent(self):
         user_response = (
             typer.prompt(
@@ -46,7 +52,7 @@ class User:
             .strip()
         )
 
-        # Transform this in a function
+        # Refactor this into a function
         if user_response == "sd":
             try:
                 self.delete_by_sender()
@@ -67,6 +73,7 @@ class User:
             print("Be sure to type a valid answer")
             self.deletion_parent()
 
+    # Flagg the selected mails as DELETED
     def delete_by_sender(self):
         sender = input("Enter the sender mail address: ").lower().strip()
         try:
@@ -85,6 +92,7 @@ class User:
             self.delete_by_sender()
         self.reload_deletion()
 
+    # Flagg the selected mails as DELETED - Maybe refactor this two functions into a third one with the concept(Interfaces in golang)
     def delete_by_subject(self):
         subject = input("Enter the subject key-words: ")
         subject_unaccented = unidecode.unidecode(subject)
@@ -122,6 +130,7 @@ class User:
             self.delete_by_subject()
         self.reload_deletion()
 
+    # Decode the bytes header messages into a redable format
     def show_messages_topics(self, messages):
         for response in messages:
             if isinstance(response, tuple):

@@ -26,7 +26,6 @@ def create_user_file():
         fg=typer.colors.GREEN,
     )
     password = typer.prompt("Enter your application password: ")
-
     with open(".env", "w") as file:
         file.write(f"USERNAME={username}\n")
         file.write(f"PASSWORD={password}")

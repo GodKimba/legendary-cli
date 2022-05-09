@@ -45,7 +45,8 @@ class User:
     def deletion_parent(self):
         user_response = (
             typer.prompt(
-                "Do you wish to search by subject or by sender? (type: subject(s), sender(sd) or quit(q))"
+                # Refactor this into a smaller prompt or another function
+                "Do you wish to search by subject, by sender or by date? (type: subject(s), sender(sd), date(d) or quit(q))"
             )
             .lower()
             .strip()
@@ -64,6 +65,14 @@ class User:
                 self.delete_by_subject()
             except TypeError:
                 print(try_again_message)
+
+        elif user_response == "d":
+            try:
+                self.delete_by_date()
+
+            except TypeError:
+                print(try_again_message)
+        
         elif user_response == "q":
             typer.secho("Until the next time!", fg=typer.colors.GREEN)
             raise typer.Exit(0)
@@ -114,8 +123,9 @@ class User:
 
     def delete_by_date(self):
         since_date_input = ("Enter the desired initial date(ex:01-jan-2020): ").upper().strip()
-        before_date_input = ("Enter the desired end date(ex:01-jan-2020): ").upper().strip()
-        status, messages = imap.search(None, f'SINCE "{since_date_input}" BEFORE "{before_date_input}"')
+        # before_date_input = ("Enter the desired end date(ex:01-jan-2020): ").upper().strip()
+        #status, messages = imap.search(None, f'SINCE "{since_date_input}" BEFORE "{before_date_input}"')
+        status, messages = imap.search(None, f"SINCE {since_date_input}")
         try:
             messages = messages[0].split(b" ")
             # Loop to iterate over targeted mails and mark them as deleted

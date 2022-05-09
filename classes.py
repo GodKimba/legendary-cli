@@ -2,7 +2,7 @@ import typer
 import imaplib
 import email
 from email.header import decode_header
-
+import unidecode
 
 try_again_message = "Try again, be sure that the sender email exists."
 
@@ -32,6 +32,7 @@ class User:
         )
         if user_response == "n":
             self.delete_and_expunge()
+            typer.Exit(0)
 
         if user_response == "y":
             self.deletion_parent()
@@ -86,7 +87,8 @@ class User:
 
     def delete_by_subject(self):
         subject = input("Enter the subject key-words: ")
-        status, messages = imap.search(None, f"SUBJECT {subject}")
+        subject_unaccented = unidecode.unidecode(subject)
+        status, messages = imap.search(None, f"SUBJECT {subject_unaccented}")
         try:
             messages = messages[0].split(b" ")
             # Loop to iterate over targeted mails and mark them as deleted

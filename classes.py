@@ -113,7 +113,9 @@ class User:
         self.reload_deletion()
 
     def delete_by_date(self):
-        status, messages = imap.search(None, 'SINCE "01-JAN-2020"')
+        since_date_input = ("Enter the desired initial date(ex:01-jan-2020): ").upper().strip()
+        before_date_input = ("Enter the desired end date(ex:01-jan-2020): ").upper().strip()
+        status, messages = imap.search(None, f'SINCE "{since_date_input}" BEFORE "{before_date_input}"')
         try:
             messages = messages[0].split(b" ")
             # Loop to iterate over targeted mails and mark them as deleted

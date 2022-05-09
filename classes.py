@@ -27,8 +27,6 @@ class User:
         imap.expunge()
         imap.close()
         imap.logout()
-        typer.secho("Thanks, until the next time!", color="GREEN")
-        typer.Exit(code=0)
 
     # Returning the option to delete new mails
     def reload_deletion(self):
@@ -37,6 +35,7 @@ class User:
         )
         if user_response == "n":
             self.delete_and_expunge()
+            typer.echo("Thanks, until next time!")
             typer.Exit(0)
 
         if user_response == "y":

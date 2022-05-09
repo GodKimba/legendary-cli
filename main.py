@@ -19,7 +19,7 @@ def check_if_empty(item_to_check):
 
 # Better utilize the typer library to make clear to the user to type the password
 # Or just throw out the hole cli concept and make a ui...
-def create_user_file(password: str =typer.Option(..., prompt= True, hide_input= True)):
+def create_user_file():
     username = input("Enter your gmail address: ").lower().strip()
     typer.secho(
         "If you don't have a application passowrd yet, follow these instructions: https://support.google.com/accounts/answer/185833?hl=en",

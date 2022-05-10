@@ -51,36 +51,8 @@ class User:
             .lower()
             .strip()
         )
-
-        # Refactor this into a function
-        if user_response == "sd":
-            try:
-                self.delete_by_sender()
-
-            except TypeError:
-                print(try_again_message)
-
-        elif user_response == "s":
-            try:
-                self.delete_by_subject()
-            except TypeError:
-                print(try_again_message)
-
-        elif user_response == "d":
-            try:
-                self.delete_by_date()
-
-            except TypeError:
-                print(try_again_message)
+        self.choose_deletion_type(user_response)
         
-        elif user_response == "q":
-            typer.secho("Until the next time!", fg=typer.colors.GREEN)
-            raise typer.Exit(0)
-
-        else:
-            print("Be sure to type a valid answer")
-            self.deletion_parent()
-
     # Flagg the selected mails as DELETED
     def delete_by_sender(self):
         sender = input("Enter the sender mail address: ").lower().strip()
@@ -152,3 +124,33 @@ class User:
                     # If it is a bytes type, decode to str
                     subject = subject.decode()
                 print("Deleting", subject)
+
+    def choose_deletion_type(self, user_response):
+        if user_response == "sd":
+            try:
+                self.delete_by_sender()
+
+            except TypeError:
+                print(try_again_message)
+
+        elif user_response == "s":
+            try:
+                self.delete_by_subject()
+            except TypeError:
+                print(try_again_message)
+
+        elif user_response == "d":
+            try:
+                self.delete_by_date()
+
+            except TypeError:
+                print(try_again_message)
+        
+        elif user_response == "q":
+            typer.secho("Until the next time!", fg=typer.colors.GREEN)
+            raise typer.Exit(0)
+
+        else:
+            print("Be sure to type a valid answer")
+            self.deletion_parent()
+

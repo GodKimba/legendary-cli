@@ -154,3 +154,11 @@ class User:
             print("Be sure to type a valid answer")
             self.deletion_parent()
 
+    # Debug this function, for some reason the program won't delete the messages when using this inside the other delete functions
+    def deletion_main_func(messages):
+        for mail in messages:
+            _, msg = imap.fetch(mail, "(RFC822)")
+            self.show_messages_topics(msg)
+            # Marking the mail as deleted
+            imap.store(mail, "+FLAGS", "\\Deleted")
+

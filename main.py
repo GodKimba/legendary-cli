@@ -5,10 +5,6 @@ from classes import User
 
 app = typer.Typer()
 
-# # Environment variables to hide the default value from cli
-# os.environ["USERNAME"] = config("USERNAME")
-# os.environ["PASSWORD"] = config("PASSWORD")
-
 # Still need to change the way that the default user is set
 # Fix the error from searching non existing keys words
 # I think is better to use @app.command() to have a cleaner and more efficient code
@@ -38,6 +34,7 @@ def main():
     primary_user = User(
         username=config("USERNAME"),
         password=config("PASSWORD"),
+        # Change here to your wanted server
         mail_server="imap.gmail.com",
     )
 

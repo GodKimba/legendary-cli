@@ -2,7 +2,9 @@
 Python Script that uses the imap library to clean up bulk emails using keywords or mail addresses.
 
 ## Installation
-It's as easy as cloning the repo and running the script
+It's as easy as cloning the repo and running the script.
+Right now the script only works with gmail server and you'll need to create an app password in the security section of your mail account. 
+I already linked the url in the instructions that will show when you run the script the first time.
 
 ## User Configuration
 The script uses a .env file to store locally your mail credentials, if you're using gmail the script will automatically guide your through the config.

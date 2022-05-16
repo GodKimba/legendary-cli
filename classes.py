@@ -6,6 +6,12 @@ import unidecode
 
 try_again_message = "Try again, be sure that the sender email exists."
 
+spam_mails_dict = {"uber" : "noreply@uber.com"} 
+
+chosen_mail_spam = input("Choose your mail spammer: ")
+
+func show_predefined_spam():
+        print(spam_mails_dict)
 
 class User:
     # Initializing the User class
